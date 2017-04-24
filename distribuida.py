@@ -2,7 +2,8 @@ from bottle import run, get, post, view, request, redirect
 import requests, bottle, json, threading, time, sys
 
 historico_msgs = [("Bem Vindos","Chat Inciado")]
-peers = sys.argv[2:]
+host = "http://localhost:"+sys.argv[1]
+peers = [host]+sys.argv[2:]
 
 nome = ""
 
@@ -28,8 +29,10 @@ def mensagemEnviar(): #se caso foi chamado o metodo enviar, significa que o acti
     redirect('/mensagens')
 
 
-@get('/peers')
+@post('/peers') #@post 
 def index():
+    h = request.forms.get('host')
+    peers.append(h)
     return json.dumps(peers)
 
 @get('/messages')
@@ -43,10 +46,10 @@ def searchPeers():
     while True:
         time.sleep(1)
         newPeers = []
-        for p in peers:
-            r = requests.get(p + '/peers')
+        for p in set(peers):
+            r = requests.post(p + '/peers', data={'host':host}) #r = requests.get(p + '/peers')
             newPeers = newPeers + json.loads(r.text)
-        peers[:] = list(set(newPeers + peers))
+        peers[:] = list(set(newPeers + peers)) #elimina repetidos
         print(peers)
         time.sleep(2)
 
@@ -55,7 +58,7 @@ def searchMessages():
     time.sleep(5)
     while True:
         newMs = []
-        for p in peers:
+        for p in set(peers):
             m = requests.get(p + '/messages')
             newMs = json.loads(m.text)
             for msg in newMs:
