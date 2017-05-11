@@ -1,19 +1,12 @@
 from random import*
-from bottle import run, get, post, view, request, redirect
+tabuleiro  = [[ randint(0,2) for x in range(10)] for x in range(10)]
 
-tabuleiro = []
-tabuleiroView = []
 
-@get('/index')
-@view('campo_minado')
-def criaCampoMinado():
-	global tabuleiroView
-	global tabuleiro
-	tabuleiroView  = [[ '-' for x in range(10)] for x in range(10)]
-	tabuleiro  = [[ randint(0,2) for x in range(10)] for x in range(10)]
-	print (tabuleiroView)
-	
-	# print (len(tabuleiro))
+	print (tabuleiro)
+
+	print (len(tabuleiro))
+
+
 	for i in range(len(tabuleiro)):
 		for j in range(len(tabuleiro)):
 			if tabuleiro[i][j] != 1:
@@ -24,7 +17,7 @@ def criaCampoMinado():
 			if tabuleiro[i][j] == 1:
 				tabuleiro[i][j] = 10
 
-	# print (tabuleiro)
+	print (tabuleiro)
 	for i in range(len(tabuleiro)):
 		for j in range(len(tabuleiro)):
 			if tabuleiro[i][j] >= 10 and j > 0: #soma no lado esquerdo da bomba 
@@ -55,41 +48,10 @@ def criaCampoMinado():
 	print ("\nTabuleiro com as Bombas e Aviso de Quantidades")
 	print ("Valores menores de 10 são as quantidades de bombas no entorno")
 	print ("valores maior ou igual a 10 são bombas somadas de quantidades no entorno")
-	# for i in range(len(tabuleiro)):
-	# 	print('\n')
-	# 	for j in range(len(tabuleiro)):
+	for i in range(len(tabuleiro)):
+		print('\n')
+		for j in range(len(tabuleiro)):
 
-	# 		print("  %d  " %tabuleiro[i][j], end = "")
+			print("  %d  " %tabuleiro[i][j], end = "")
 
-	# print('\n')
-	#return {'tabuleiro': tabuleiroCompleto}
-	print (tabuleiro)
-	redirect('/tabuleiro')
-
-@get('/tabuleiro')
-@view('campo_minado')
-def retornaTabuleiroview():
-	return {'tabuleiroView': tabuleiroView}
-
-
-@post('/jogada')
-def atualizaTabuleiroView():
-    y = int(request.forms.get('x'))-1
-    x = int(request.forms.get('y'))-1
-
-    print (x,y)
-    if (tabuleiro[x][y] < 10 and tabuleiro[x][y] != 0):
-    	tabuleiroView[x][y] = tabuleiro[x][y]
-    if (tabuleiro[x][y] >= 10):
-    	for i in range(len(tabuleiro)):
-    		for j in range(len(tabuleiro)):
-    			if tabuleiro[i][j] >= 10:
-    				tabuleiroView[i][j] = '*'
-
-    if (tabuleiro[x][y] == 0):
-    	tabuleiroView[x][y] = 0
-
-    redirect('/tabuleiro')
-
-
-run(host='localhost', port=8081)
+	print('\n')

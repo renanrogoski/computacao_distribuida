@@ -1,19 +1,18 @@
 from random import*
 from bottle import run, get, post, view, request, redirect
 
-tabuleiro = []
-tabuleiroView = []
 
-@get('/index')
+@get('/tabuleiro')
 @view('campo_minado')
 def criaCampoMinado():
-	global tabuleiroView
-	global tabuleiro
-	tabuleiroView  = [[ '-' for x in range(10)] for x in range(10)]
 	tabuleiro  = [[ randint(0,2) for x in range(10)] for x in range(10)]
-	print (tabuleiroView)
-	
+
+
+	# print (tabuleiro)
+
 	# print (len(tabuleiro))
+
+
 	for i in range(len(tabuleiro)):
 		for j in range(len(tabuleiro)):
 			if tabuleiro[i][j] != 1:
@@ -62,34 +61,6 @@ def criaCampoMinado():
 	# 		print("  %d  " %tabuleiro[i][j], end = "")
 
 	# print('\n')
-	#return {'tabuleiro': tabuleiroCompleto}
-	print (tabuleiro)
-	redirect('/tabuleiro')
+	return {'tabuleiro': tabuleiro}
 
-@get('/tabuleiro')
-@view('campo_minado')
-def retornaTabuleiroview():
-	return {'tabuleiroView': tabuleiroView}
-
-
-@post('/jogada')
-def atualizaTabuleiroView():
-    y = int(request.forms.get('x'))-1
-    x = int(request.forms.get('y'))-1
-
-    print (x,y)
-    if (tabuleiro[x][y] < 10 and tabuleiro[x][y] != 0):
-    	tabuleiroView[x][y] = tabuleiro[x][y]
-    if (tabuleiro[x][y] >= 10):
-    	for i in range(len(tabuleiro)):
-    		for j in range(len(tabuleiro)):
-    			if tabuleiro[i][j] >= 10:
-    				tabuleiroView[i][j] = '*'
-
-    if (tabuleiro[x][y] == 0):
-    	tabuleiroView[x][y] = 0
-
-    redirect('/tabuleiro')
-
-
-run(host='localhost', port=8081)
+run(host='localhost', port=8080)
