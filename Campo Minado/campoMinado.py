@@ -10,7 +10,7 @@ def criaCampoMinado():
 	global tabuleiroView
 	global tabuleiro
 	tabuleiroView  = [[ '-' for x in range(10)] for x in range(10)]
-	tabuleiro  = [[ randint(0,2) for x in range(10)] for x in range(10)]
+	tabuleiro  = [[ randint(0,3) for x in range(10)] for x in range(10)]
 	print (tabuleiroView)
 	
 	# print (len(tabuleiro))
@@ -55,14 +55,15 @@ def criaCampoMinado():
 	print ("\nTabuleiro com as Bombas e Aviso de Quantidades")
 	print ("Valores menores de 10 são as quantidades de bombas no entorno")
 	print ("valores maior ou igual a 10 são bombas somadas de quantidades no entorno")
-	# for i in range(len(tabuleiro)):
-	# 	print('\n')
-	# 	for j in range(len(tabuleiro)):
+	for i in range(len(tabuleiro)):
+		print('\n')
+		for j in range(len(tabuleiro)):
 
-	# 		print("  %d  " %tabuleiro[i][j], end = "")
+			print("  %d  " %tabuleiro[i][j], end = "")
 
-	# print('\n')
-	#return {'tabuleiro': tabuleiroCompleto}
+	print('\n')
+	
+
 	print (tabuleiro)
 	redirect('/tabuleiro')
 
@@ -87,9 +88,40 @@ def atualizaTabuleiroView():
     				tabuleiroView[i][j] = '*'
 
     if (tabuleiro[x][y] == 0):
-    	tabuleiroView[x][y] = 0
+    	verificaVizinho(x,y)
 
     redirect('/tabuleiro')
+
+def verificaVizinho(x,y):
+	if tabuleiro[x][y] == 0:
+		tabuleiroView[x][y] = 0
+		tabuleiro[x][y] = -1
+		if y > 0:
+			if tabuleiro[x][y-1] == 0:
+				verificaVizinho(x,y-1)
+		if y < 9:
+			if tabuleiro[x][y+1] == 0:
+				verificaVizinho(x,y+1)
+		if x > 0:
+			if tabuleiro[x-1][y] == 0:
+				verificaVizinho(x-1,y)
+		if x < 9:
+			if tabuleiro[x+1][y] == 0:
+				verificaVizinho(x+1,y)
+		if x > 0 and y > 0:
+			if tabuleiro[x-1][y-1] == 0:
+				verificaVizinho(x-1,y-1)
+		if x > 0 and y < 9:
+			if tabuleiro[x-1][y+1] == 0:
+				verificaVizinho(x-1,y+1)
+		if x < 9 and y > 0:
+			if tabuleiro[x+1][y-1] == 0: #aqui
+				verificaVizinho(x+1,y-1)
+		if x < 9 and y < 9:
+			if tabuleiro[x+1][y+1] == 0:
+				verificaVizinho(x+1,y+1)
+
+	
 
 
 run(host='localhost', port=8081)
