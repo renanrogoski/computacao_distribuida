@@ -72,11 +72,16 @@ def criaCampoMinado():
 def retornaTabuleiroview():
 	return {'tabuleiroView': tabuleiroView}
 
+@get('/perdeu')
+@view('perdeu')
+def retornaTabuleiroview():
+	return {'tabuleiroView': tabuleiroView}
+
 
 @post('/jogada')
 def atualizaTabuleiroView():
-    y = int(request.forms.get('x'))-1
-    x = int(request.forms.get('y'))-1
+    x = int(request.forms.get('x'))-1
+    y = int(request.forms.get('y'))-1
 
     print (x,y)
     if (tabuleiro[x][y] < 10 and tabuleiro[x][y] != 0):
@@ -86,6 +91,7 @@ def atualizaTabuleiroView():
     		for j in range(len(tabuleiro)):
     			if tabuleiro[i][j] >= 10:
     				tabuleiroView[i][j] = '*'
+    	redirect('/perdeu')
 
     if (tabuleiro[x][y] == 0):
     	verificaVizinho(x,y)
@@ -120,8 +126,5 @@ def verificaVizinho(x,y):
 		if x < 9 and y < 9:
 			if tabuleiro[x+1][y+1] == 0:
 				verificaVizinho(x+1,y+1)
-
-	
-
 
 run(host='localhost', port=8081)

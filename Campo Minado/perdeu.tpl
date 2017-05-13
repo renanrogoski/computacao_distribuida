@@ -15,12 +15,8 @@
 %end
 </ul>
 
-<span>Informe a posição xy da Jogada.</span>
-<form action="/jogada" method=POST>
-    <p> Posição Linha <input name="x" type="text"/> </p>
-    <p> Posição Coluna <input name="y" type="text"/> </p>
-    <p> <input value="Enviar" type="submit" /> </p>
-</form>
+<span>Fim de Jogo. Morreu.</span><br/>
+<a href="http://localhost:8081/index"><button>Recomeçar o Jogo</button></a>
 
 
 </body>
