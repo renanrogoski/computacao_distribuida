@@ -1,6 +1,10 @@
 from bottle import run, get, post, view, request, redirect
 import requests, bottle, json, threading, time, sys
 
+
+tabuleiro = []
+tabuleiroView = []
+
 historico_msgs = [("Bem Vindos","Chat Inciado")]
 host = "http://localhost:"+sys.argv[1]
 peers = [host]+sys.argv[2:]
