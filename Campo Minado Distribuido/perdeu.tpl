@@ -104,7 +104,7 @@
 		
 		
 		function Redireciona(porta){
-			var local = "http://localhost:"+ {{porta}};
+			var local = "http://localhost:"+ {{porta}}+"/tabuleiro";
 			$("#link").attr("href", local);
 		}
 		

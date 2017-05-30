@@ -9,6 +9,7 @@ jogadas = []
 peers = sys.argv[2:]
 porta = int(sys.argv[1])
 #semente = int(sys.argv[3])
+peers.append("http://localhost:"+str(sys.argv[1]))  
 
 print(peers)
 
@@ -23,6 +24,7 @@ print(peers)
 def criaCampoMinado():
     global tabuleiroView
     global tabuleiro
+    global jogadas
     seed(5)
 
     tabuleiroView  = [[ '-' for x in range(10)] for x in range(10)]
@@ -66,21 +68,9 @@ def criaCampoMinado():
 
             if tabuleiro[i][j] >= 10 and i < 9: #soma embaixo
                 tabuleiro[i+1][j]+=1
-
-
-    #print ("\nTabuleiro com as Bombas e Aviso de Quantidades")
-    #print ("Valores menores de 10 são as quantidades de bombas no entorno")
-    #print ("valores maior ou igual a 10 são bombas somadas de quantidades no entorno")
-    #for i in range(len(tabuleiro)):
-        #print('\n')
-        #for j in range(len(tabuleiro)):
-
-            #print("  %d  " %tabuleiro[i][j], end = "")
-
-    #print('\n')
     
-
-    #print (tabuleiro)
+    time.sleep(2)
+    atualizaJogadas(jogadas)
     redirect('/tabuleiro')
 
 
@@ -104,32 +94,37 @@ def atualizaTabuleiroView():
     
     jogadas.append({'tipo': "jogada", 'x': x, 'y': y})
 
-    todosJoga(x,y)
+    testaJogadas(x,y)
 
     #print(tabuleiroView)    
     redirect('/tabuleiro')
 
-def todosJoga(x,y):
+def testaJogadas(x,y):
     global tabuleiroView
     global tabuleiro
     if (tabuleiro[x][y] < 10 and tabuleiro[x][y] != 0):
         tabuleiroView[x][y] = tabuleiro[x][y]
-    if (tabuleiro[x][y] >= 10):
+    elif (tabuleiro[x][y] >= 10):
         for i in range(len(tabuleiro)):
             for j in range(len(tabuleiro)):
                 if tabuleiro[i][j] >= 10:
                     tabuleiroView[i][j] = '*'
         redirect('/perdeu')
 
-    if (tabuleiro[x][y] == 0):
+    elif (tabuleiro[x][y] == 0):
         verificaVizinho(x,y)
+
+
     
 
-def atualizaJogadas(valor):
-    for x in valor: #lista e jogadas
-        if x['tipo'] == 'jogada':
+def atualizaJogadas(lista):
+    global tabuleiro
+    print('tabuleiro '+str(tabuleiro))
+    for jogada in lista: #lista de jogadas
+        if jogada['tipo'] == 'jogada':
             print ("encontrei jogada")
-            todosJoga(x['x'],x['y'])
+            testaJogadas(jogada['x'],jogada['y'])
+
 
     
 
@@ -185,16 +180,17 @@ def clientePeers():
 
 
 def clienteMessages():
+    global tabuleiro
     time.sleep(5)
     while True:
         nm = []
         for p in peers:
             print("entrouuuuuuuuuuu")
             m=requests.get(p + '/jogadas')
-            valor = json.loads(m.text)
-            print(valor)
-            if valor:
-                atualizaJogadas(valor)
+            lista_jogadas = json.loads(m.text)
+            print(lista_jogadas)
+            if lista_jogadas and tabuleiro:
+                atualizaJogadas(lista_jogadas)
                 
             
         time.sleep(2)

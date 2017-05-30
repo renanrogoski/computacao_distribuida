@@ -11,10 +11,6 @@ def criaCampoMinado():
 	global tabuleiro
 
 	
-
-
-
-	
 	tabuleiroView  = [[ '-' for x in range(10)] for x in range(10)]
 	tabuleiro  = [[ randint(0,3) for x in range(10)] for x in range(10)]
 	print (tabuleiroView)
