@@ -106,6 +106,11 @@ def retornaTabuleiroview():
     ordenacaoJogadas()
     atualizaJogadas(todasJogadas)
 
+    # for i in range(len(tabuleiroView)):
+    #     # print("\n")
+    #     for j in range(len(tabuleiroView)):
+    #         print (tabuleiroView[i][j]+" ")
+
     return {'tabuleiroView': tabuleiroView, 'pontos': pontos, 'hash': meuHash}
 
 
@@ -151,12 +156,11 @@ def atualizaTabuleiroView():
     if x != None and y != None:
         vc.increment()
         m = (x, y, frozendict(vc.vClock))
-        jogadas.add(m)
         if(tabuleiro[x][y]) < 10 : 
-            
+            jogadas.add(m)
             if(tabuleiroView[x][y] != tabuleiro[x][y]):pontos = pontos + tabuleiro[x][y]
-        #else : 
-            #estouraBombas()      
+        else : 
+            estouraBombas()      
 
     redirect('/tabuleiro')
 
@@ -195,9 +199,6 @@ def testaJogadas(x,y):
     elif (tabuleiro[x][y] == 0):
         verificaVizinho(x,y)
 
-
-    
-
 def atualizaJogadas(todasJogadas):
     for jogada in todasJogadas: #lista de jogadas
         testaJogadas(jogada[0],jogada[1])
@@ -234,11 +235,6 @@ def verificaVizinho(x,y):
         if x < 9 and y < 9:
             if tabuleiro[x+1][y+1] == 0:
                 verificaVizinho(x+1,y+1)
-
-    for i in range(len(tabuleiroView)):
-    		print("\n")
-            for j in range(len(tabuleiroView)):
-                print (tabuleiroView[x][y]" ")
 
 @get('/peers')
 def index():
